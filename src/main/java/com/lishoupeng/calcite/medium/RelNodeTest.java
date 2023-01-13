@@ -12,13 +12,13 @@ import java.util.Objects;
 
 public class RelNodeTest {
 
-    private static final String SQL1 = "select * from DEMO.TEST01 t1 left join DEMO.TEST02 t2 on t1.NAME1=t2.NAME3 where t1.NAME1='hello'";
-    private static final String SQL2 = "select * from DEMO.TEST01 where TEST01.NAME1='hello'";
+    private static final String SQL1 = "select * from DEMO.job j left join DEMO.instance i on i.jobid=j.id where j.name='jobName_1'";
+    private static final String SQL2 = "select * from DEMO.job where name='jobName_1'";
     private static final String FILE_PATH = "/model.json";
     private static final Connection connection = CalciteUtils.getConnect(FILE_PATH);
 
     public static void main(String[] args) {
-        RelRoot root = Utils.sql2RelRoot(connection, SQL2);
+        RelRoot root = Utils.sql2RelRoot(connection, SQL1);
         assert root != null;
         System.out.println("----------------- before optimizer ------------------");
         System.out.println(RelOptUtil.toString(root.rel, SqlExplainLevel.ALL_ATTRIBUTES));
@@ -26,6 +26,5 @@ public class RelNodeTest {
         System.out.println("----------------- after optimizer ------------------");
         System.out.println(RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES));
     }
-
 
 }

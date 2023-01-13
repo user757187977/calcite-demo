@@ -19,7 +19,7 @@ import java.sql.Connection;
  */
 public class RboTest {
 
-    private static final String SQL = "select * from DEMO.TEST01 where TEST01.NAME1='hello'";
+    private static final String SQL = "select * from demo.job where name='hello'";
     private static final String FILE_PATH = "/model.json";
     private static final Connection connection = CalciteUtils.getConnect(FILE_PATH);
 

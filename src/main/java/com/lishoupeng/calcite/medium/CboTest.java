@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class CboTest {
 
-    private static final String SQL = "select * from DEMO.TEST01 where TEST01.NAME1='hello'";
+    private static final String SQL = "select * from DEMO.JOB where JOB.NAME='jobName_1'";
     private static final String FILE_PATH = "/model.json";
     private static final Connection connection = CalciteUtils.getConnect(FILE_PATH);
 

@@ -7,7 +7,7 @@
       "type": "custom",
       "factory": "com.lishoupeng.calcite.medium.schema.CsvSchemaFactory",
       "operand": {
-        "dataFile": "JOB.csv,INSTANCE.csv,TEST01.csv,TEST02.csv"
+        "dataFile": "JOB.csv,INSTANCE.csv"
       }
     }
   ]
