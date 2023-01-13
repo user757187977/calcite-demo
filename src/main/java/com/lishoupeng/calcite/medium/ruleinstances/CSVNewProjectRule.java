@@ -1,4 +1,4 @@
-package com.lishoupeng.calcite.medium.ruleInstances;
+package com.lishoupeng.calcite.medium.ruleinstances;
 
 import com.lishoupeng.calcite.medium.reloperators.CSVProject;
 import com.lishoupeng.calcite.medium.reloperators.CSVRel;

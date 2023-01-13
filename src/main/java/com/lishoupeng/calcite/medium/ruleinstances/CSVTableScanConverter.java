@@ -1,4 +1,4 @@
-package com.lishoupeng.calcite.medium.ruleInstances;
+package com.lishoupeng.calcite.medium.ruleinstances;
 
 import com.lishoupeng.calcite.medium.reloperators.CSVRel;
 import com.lishoupeng.calcite.medium.reloperators.CSVTableScan;
@@ -20,13 +20,13 @@ public class CSVTableScanConverter extends ConverterRule {
             "CSVTableScan"
     );
 
+    public CSVTableScanConverter(Class<? extends RelNode> clazz, RelTrait in, RelTrait out, String description) {
+        super(clazz, in, out, description);
+    }
+
     @Override
     public boolean matches(RelOptRuleCall call) {
         return super.matches(call);
-    }
-
-    public CSVTableScanConverter(Class<? extends RelNode> clazz, RelTrait in, RelTrait out, String description) {
-        super(clazz, in, out, description);
     }
 
     @Override

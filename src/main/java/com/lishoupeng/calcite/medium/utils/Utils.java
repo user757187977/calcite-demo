@@ -1,9 +1,9 @@
 package com.lishoupeng.calcite.medium.utils;
 
 import com.google.common.collect.Lists;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVFilterConverter;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVProjectConverter;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVTableScanConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVFilterConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVProjectConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVTableScanConverter;
 import org.apache.calcite.config.Lex;
 import org.apache.calcite.jdbc.CalcitePrepare;
 import org.apache.calcite.plan.ConventionTraitDef;
@@ -21,17 +21,13 @@ import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.server.CalciteServerStatement;
 import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.type.SqlTypeFactoryImpl;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.Planner;
-import org.apache.calcite.tools.RelConversionException;
-import org.apache.calcite.tools.ValidationException;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -52,24 +48,11 @@ public class Utils {
 //                .traitDefs(ConventionTraitDef.INSTANCE, RelDistributionTraitDef.INSTANCE)
                     .build();
             Planner planner = Frameworks.getPlanner(frameworkConfig);
-            RelRoot root;
             SqlNode parse = planner.parse(sql);
             SqlNode validate = planner.validate(parse);
-            root = planner.rel(validate);
-//        RelNode rel = root.rel;
-            return root;
-        } catch (SQLException e) {
+            return planner.rel(validate);
+        } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("SQLException:" + e);
-        } catch (ValidationException e) {
-            e.printStackTrace();
-            System.err.println("ValidationException:" + e);
-        } catch (SqlParseException e) {
-            e.printStackTrace();
-            System.err.println("SqlParseException:" + e);
-        } catch (RelConversionException e) {
-            e.printStackTrace();
-            System.err.println("RelConversionException:" + e);
         }
         return null;
     }

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class CsvSchema extends AbstractSchema {
 
-    // dataFiles 定义在 model.json 一个属性, 我们这里以为这表名.
+    // dataFiles 定义在 model.json 一个属性, 我们这里意味着表名.
     private final String dataFiles;
 
     public CsvSchema(String dataFile) {

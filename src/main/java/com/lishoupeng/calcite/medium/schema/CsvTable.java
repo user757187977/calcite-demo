@@ -27,7 +27,7 @@ public class CsvTable extends AbstractTable implements ScannableTable {
     }
 
     /**
-     * 讲字段名称与类型映射.
+     * 字段名称与类型映射.
      */
     @Override
     public RelDataType getRowType(RelDataTypeFactory relDataTypeFactory) {

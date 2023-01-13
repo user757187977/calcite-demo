@@ -2,11 +2,11 @@ package com.lishoupeng.calcite.medium;
 
 import com.lishoupeng.calcite.easy.utils.CalciteUtils;
 import com.lishoupeng.calcite.medium.cost.DefaultRelMetadataProvider;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVFilterConverter;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVNewProjectConverter;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVNewProjectRule;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVProjectConverter;
-import com.lishoupeng.calcite.medium.ruleInstances.CSVTableScanConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVFilterConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVNewProjectConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVNewProjectRule;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVProjectConverter;
+import com.lishoupeng.calcite.medium.ruleinstances.CSVTableScanConverter;
 import com.lishoupeng.calcite.medium.utils.Utils;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class CboTest {
 
-    private static final String SQL = "select * from DEMO.JOB where JOB.NAME='jobName_1'";
+    private static final String SQL = "select * from demo.job where name='jobName_1'";
     private static final String FILE_PATH = "/model.json";
     private static final Connection connection = CalciteUtils.getConnect(FILE_PATH);
 
