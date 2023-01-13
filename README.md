@@ -7,5 +7,5 @@
    * [easy](./src/main/java/com/lishoupeng/calcite/easy): 入门, 包含了 SQL parser, validate, optimization(RBO/CBO).
    * [medium](./src/main/java/com/lishoupeng/calcite/medium): 中级, 结合自定义 schema, cost, rules 实现完整的过程.
 4. 建议从 easy 入门, 了解 calcite 处理一条 SQL 的过程: 
-   * **SQL** -_Parser_- **SqlNode** -_validate_-> **SqlNode** -_Rel(Rex)_-> **RelNode** -_Optimization(HepPlanner/VolcanoPlanner)_-> **findBestExp**
+   * **SQL** -_Parser_-> **SqlNode** -_validate_-> **SqlNode** -_Rel(Rex)_-> **RelNode** -_Optimization(HepPlanner/VolcanoPlanner)_-> **findBestExp**
 5. 再进入到 medium 阶段, 开始接触自定义 schema(表信息), cost(成本), 优化规则(rules)
