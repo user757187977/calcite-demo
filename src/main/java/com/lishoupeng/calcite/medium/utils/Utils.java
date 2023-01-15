@@ -17,6 +17,9 @@ import org.apache.calcite.rel.RelRoot;
 import org.apache.calcite.rel.metadata.CachingRelMetadataProvider;
 import org.apache.calcite.rel.metadata.ChainedRelMetadataProvider;
 import org.apache.calcite.rel.metadata.RelMetadataProvider;
+import org.apache.calcite.rel.rules.FilterJoinRule;
+import org.apache.calcite.rel.rules.PruneEmptyRules;
+import org.apache.calcite.rel.rules.ReduceExpressionsRule;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.server.CalciteServerStatement;
@@ -57,18 +60,42 @@ public class Utils {
         return null;
     }
 
+    /**
+     * 简单的 RBO 优化器使用.
+     * @param relNode relNode
+     * @return RelNode
+     */
+    public static RelNode easyRboOptimization(RelNode relNode) {
+        HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
+        // 可以测试下 修改 rule 的顺序, 减少/增加 其他 rule
+//        hepProgramBuilder.addRuleInstance(FilterJoinRule.FILTER_ON_JOIN);
+//        hepProgramBuilder.addRuleInstance(ReduceExpressionsRule.PROJECT_INSTANCE);
+//        hepProgramBuilder.addRuleInstance(PruneEmptyRules.PROJECT_INSTANCE);
+        HepPlanner hepPlanner = new HepPlanner(hepProgramBuilder.build());
+        hepPlanner.setRoot(relNode);
+        return hepPlanner.findBestExp();
+    }
+
+    /**
+     *
+     * @param basePlan
+     * @param relMetadataProvider
+     * @param relOptRules
+     * @return
+     */
     public static RelNode rboOptimization(
             RelNode basePlan,
             RelMetadataProvider relMetadataProvider,
             RelOptRule... relOptRules
     ) {
+        // the same as easyRboOptimization.
         HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
         for (RelOptRule relOptRule : relOptRules) {
             hepProgramBuilder.addRuleInstance(relOptRule);
         }
         HepPlanner hepPlanner = new HepPlanner(
-                hepProgramBuilder.build(),
-                basePlan.getCluster().getPlanner().getContext()
+                hepProgramBuilder.build()
+//                , basePlan.getCluster().getPlanner().getContext()
         );
         List<RelMetadataProvider> relMetadataProviders = Lists.newArrayList();
         relMetadataProviders.add(relMetadataProvider);

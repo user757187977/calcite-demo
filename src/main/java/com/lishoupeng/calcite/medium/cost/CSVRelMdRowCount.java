@@ -25,16 +25,19 @@ public class CSVRelMdRowCount extends RelMdRowCount {
 
     @Override
     public Double getRowCount(RelNode rel, RelMetadataQuery mq) {
+        System.out.println("getRowCount RelNode");
         return 1.0;
     }
 
     @Override
     public Double getRowCount(Project rel, RelMetadataQuery mq) {
+        System.out.println("getRowCount Project");
         return 2.0;
     }
 
     @Override
     public Double getRowCount(Filter rel, RelMetadataQuery mq) {
+        System.out.println("getRowCount Filter");
         return mq.getRowCount(rel.getInput()) / 5;
     }
 

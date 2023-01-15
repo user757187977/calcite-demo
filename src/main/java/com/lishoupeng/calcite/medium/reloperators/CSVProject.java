@@ -20,15 +20,15 @@ public class CSVProject extends Project implements CSVRel {
 
     @Override
     public Project copy(RelTraitSet traitSet, RelNode input, List<RexNode> projects, RelDataType rowType) {
-        return new CSVProject(getCluster(),traitSet,input,projects,rowType);
+        return new CSVProject(getCluster(), traitSet, input, projects, rowType);
     }
 
     @Override
     public RelOptCost computeSelfCost(RelOptPlanner planner, RelMetadataQuery mq) {
         double dRows = mq.getRowCount(getInput());
-
         double dCpu = dRows * exps.size();
         double dIo = 0;
-        return planner.getCostFactory().makeCost(30, 30, 30);
+//        return planner.getCostFactory().makeCost(30, 30, 30);
+        return planner.getCostFactory().makeCost(dRows, dCpu, dIo);
     }
 }

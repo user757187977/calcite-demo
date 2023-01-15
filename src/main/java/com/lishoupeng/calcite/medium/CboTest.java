@@ -24,12 +24,12 @@ public class CboTest {
 
     public static void main(String[] args) {
 
-        RelRoot root = Utils.sql2RelRoot(connection, SQL);
+        RelRoot relRoot = Utils.sql2RelRoot(connection, SQL);
         System.out.println("----------------- before optimizer ------------------");
-        System.out.println(RelOptUtil.toString(Objects.requireNonNull(root).rel, SqlExplainLevel.ALL_ATTRIBUTES));
+        System.out.println(RelOptUtil.toString(Objects.requireNonNull(relRoot).rel, SqlExplainLevel.ALL_ATTRIBUTES));
 
-        RelNode rel = Utils.rboOptimization(
-                root.rel,
+        RelNode relNode = Utils.rboOptimization(
+                relRoot.rel,
                 DefaultRelMetadataProvider.getMetadataProvider(),
                 CSVTableScanConverter.INSTANCE,
                 CSVFilterConverter.INSTANCE,
@@ -38,13 +38,13 @@ public class CboTest {
         );
 
         System.out.println("----------------- after RBO optimizer ------------------");
-        System.out.println(RelOptUtil.toString(rel, SqlExplainLevel.ALL_ATTRIBUTES));
+        System.out.println(RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES));
 
         //这里的 rule 是替换 CsvProject 为 NewCsvProject，是否替换会根据 cumulative cost 的信息，谁的小就替换谁的
         //我直接在对应的 rel 里面写死了返回的 cost 信息（rows:10,cpu:10,io:0），如果调高一点（高过 CsvProject 的定义），那么是不会替换的
-        rel = Utils.cboOptimization(rel, CSVNewProjectRule.INSTANCE);
+        relNode = Utils.cboOptimization(relNode, CSVNewProjectRule.INSTANCE);
         System.out.println("----------------- after CBO optimizer ------------------");
-        System.out.println(RelOptUtil.toString(rel, SqlExplainLevel.ALL_ATTRIBUTES));
+        System.out.println(RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES));
     }
 
 

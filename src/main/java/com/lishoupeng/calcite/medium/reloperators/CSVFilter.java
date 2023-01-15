@@ -17,13 +17,13 @@ public class CSVFilter extends Filter implements CSVRel {
 
     @Override
     public Filter copy(RelTraitSet traitSet, RelNode input, RexNode condition) {
-        return new CSVFilter(getCluster(),this.traitSet,input,condition);
+        return new CSVFilter(getCluster(), this.traitSet, input, condition);
     }
 
 
     @Override
     public RelOptCost computeSelfCost(RelOptPlanner planner, RelMetadataQuery mq) {
-		RelNode input = this.input;
+        RelNode input = this.input;
 
 //		RelOptCost inputCost;
 //		if (input instanceof RelSubset) {
@@ -40,8 +40,8 @@ public class CSVFilter extends Filter implements CSVRel {
         double dCpu = dRows;
 
         double dIo = 0;
-//        return planner.getCostFactory().makeCost(dRows, dCpu, dIo);
-        return planner.getCostFactory().makeCost(2, 2, 2);
+        return planner.getCostFactory().makeCost(dRows, dCpu, dIo);
+//        return planner.getCostFactory().makeCost(2, 2, 2);
 
 
     }

@@ -30,6 +30,7 @@ public class CSVRelMdDistinctRowCount extends RelMdDistinctRowCount {
             RelNode rel, RelMetadataQuery mq,
             ImmutableBitSet groupKey, RexNode predicate
     ) {
+        System.out.println("getDistinctRowCount");
         return super.getDistinctRowCount(rel, mq, groupKey, predicate);
     }
 }

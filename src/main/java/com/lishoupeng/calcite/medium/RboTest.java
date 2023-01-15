@@ -28,21 +28,23 @@ public class RboTest {
         RelRoot relRoot = Utils.sql2RelRoot(connection, SQL);
         assert relRoot != null;
 
-        System.out.println("----------------- before optimizer ------------------");
+        System.out.println("----------------- optimizer ------------------");
         System.out.println(RelOptUtil.toString(relRoot.rel, SqlExplainLevel.ALL_ATTRIBUTES));
 
-        RelNode relNode = Utils.rboOptimization(
+        RelNode relNode = Utils.easyRboOptimization(relRoot.rel);
+        System.out.println("----------------- easy optimizer ------------------");
+        System.out.println(RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES));
+
+        RelNode relNodeCsv = Utils.rboOptimization(
                 relRoot.rel,
                 DefaultRelMetadataProvider.getMetadataProvider(),
                 CSVTableScanConverter.INSTANCE
         );
 
-        System.out.println("----------------- after optimizer ------------------");
-        /**
-         * 这里修改了 TableScan 到 Filter 的 rowcount 的计算逻辑，
-         * {@link com.lishoupeng.calcite.medium.cost.CSVRelMdRowCount#getRowCount(Filter rel, RelMetadataQuery mq) }
-         */
-        System.out.println(RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES));
+        System.out.println("----------------- csv optimizer ------------------");
+        System.out.println(RelOptUtil.toString(relNodeCsv, SqlExplainLevel.ALL_ATTRIBUTES));
+
+
     }
 
 }
