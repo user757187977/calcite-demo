@@ -71,20 +71,23 @@ public class Utils {
 //        hepProgramBuilder.addRuleInstance(FilterJoinRule.FILTER_ON_JOIN);
 //        hepProgramBuilder.addRuleInstance(ReduceExpressionsRule.PROJECT_INSTANCE);
 //        hepProgramBuilder.addRuleInstance(PruneEmptyRules.PROJECT_INSTANCE);
-        HepPlanner hepPlanner = new HepPlanner(hepProgramBuilder.build());
+        HepPlanner hepPlanner = new HepPlanner(
+                hepProgramBuilder.build()
+                , relNode.getCluster().getPlanner().getContext()
+        );
         hepPlanner.setRoot(relNode);
         return hepPlanner.findBestExp();
     }
 
     /**
-     *
-     * @param basePlan
+     * 自定义 loginPlan.
+     * @param relNode
      * @param relMetadataProvider
      * @param relOptRules
      * @return
      */
     public static RelNode rboOptimization(
-            RelNode basePlan,
+            RelNode relNode,
             RelMetadataProvider relMetadataProvider,
             RelOptRule... relOptRules
     ) {
@@ -95,14 +98,15 @@ public class Utils {
         }
         HepPlanner hepPlanner = new HepPlanner(
                 hepProgramBuilder.build()
-//                , basePlan.getCluster().getPlanner().getContext()
+                , relNode.getCluster().getPlanner().getContext()
         );
+
         List<RelMetadataProvider> relMetadataProviders = Lists.newArrayList();
         relMetadataProviders.add(relMetadataProvider);
         hepPlanner.registerMetadataProviders(relMetadataProviders);
         RelMetadataProvider chainedProvider = ChainedRelMetadataProvider.of(relMetadataProviders);
-        basePlan.getCluster().setMetadataProvider(new CachingRelMetadataProvider(chainedProvider, hepPlanner));
-        hepPlanner.setRoot(basePlan);
+        relNode.getCluster().setMetadataProvider(new CachingRelMetadataProvider(chainedProvider, hepPlanner));
+        hepPlanner.setRoot(relNode);
         return hepPlanner.findBestExp();
     }
 
