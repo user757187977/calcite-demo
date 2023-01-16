@@ -1,6 +1,7 @@
 package com.lishoupeng.calcite.medium.utils;
 
 import com.google.common.collect.Lists;
+import com.lishoupeng.calcite.medium.cost.CustomRelMetadataProvider;
 import com.lishoupeng.calcite.medium.ruleinstances.CSVFilterConverter;
 import com.lishoupeng.calcite.medium.ruleinstances.CSVProjectConverter;
 import com.lishoupeng.calcite.medium.ruleinstances.CSVTableScanConverter;
@@ -17,9 +18,6 @@ import org.apache.calcite.rel.RelRoot;
 import org.apache.calcite.rel.metadata.CachingRelMetadataProvider;
 import org.apache.calcite.rel.metadata.ChainedRelMetadataProvider;
 import org.apache.calcite.rel.metadata.RelMetadataProvider;
-import org.apache.calcite.rel.rules.FilterJoinRule;
-import org.apache.calcite.rel.rules.PruneEmptyRules;
-import org.apache.calcite.rel.rules.ReduceExpressionsRule;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.server.CalciteServerStatement;
@@ -60,52 +58,48 @@ public class Utils {
         return null;
     }
 
+    public static HepPlanner createDefault(RelNode relNode, RelOptRule... relOptRules) {
+        HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
+        for (RelOptRule relOptRule : relOptRules) {
+            hepProgramBuilder.addRuleInstance(relOptRule);
+        }
+        return new HepPlanner(hepProgramBuilder.build(), relNode.getCluster().getPlanner().getContext());
+    }
+
     /**
      * 简单的 RBO 优化器使用.
+     *
      * @param relNode relNode
      * @return RelNode
      */
     public static RelNode easyRboOptimization(RelNode relNode) {
-        HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
         // 可以测试下 修改 rule 的顺序, 减少/增加 其他 rule
-//        hepProgramBuilder.addRuleInstance(FilterJoinRule.FILTER_ON_JOIN);
-//        hepProgramBuilder.addRuleInstance(ReduceExpressionsRule.PROJECT_INSTANCE);
-//        hepProgramBuilder.addRuleInstance(PruneEmptyRules.PROJECT_INSTANCE);
-        HepPlanner hepPlanner = new HepPlanner(
-                hepProgramBuilder.build()
-                , relNode.getCluster().getPlanner().getContext()
-        );
+        // HepPlanner hepPlanner = createDefault(relNode, FilterJoinRule.FILTER_ON_JOIN, ReduceExpressionsRule.PROJECT_INSTANCE, PruneEmptyRules.PROJECT_INSTANCE);
+        HepPlanner hepPlanner = createDefault(relNode);
         hepPlanner.setRoot(relNode);
         return hepPlanner.findBestExp();
     }
 
     /**
      * 自定义 loginPlan.
-     * @param relNode
-     * @param relMetadataProvider
-     * @param relOptRules
-     * @return
+     *
+     * @param relNode     relNode
+     * @param relOptRules rules
+     * @return RelNode
      */
     public static RelNode rboOptimization(
             RelNode relNode,
-            RelMetadataProvider relMetadataProvider,
             RelOptRule... relOptRules
     ) {
-        // the same as easyRboOptimization.
-        HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
-        for (RelOptRule relOptRule : relOptRules) {
-            hepProgramBuilder.addRuleInstance(relOptRule);
-        }
-        HepPlanner hepPlanner = new HepPlanner(
-                hepProgramBuilder.build()
-                , relNode.getCluster().getPlanner().getContext()
-        );
+        HepPlanner hepPlanner = createDefault(relNode, relOptRules);
 
+        // add custom mataDataProvider.
         List<RelMetadataProvider> relMetadataProviders = Lists.newArrayList();
-        relMetadataProviders.add(relMetadataProvider);
+        relMetadataProviders.add(CustomRelMetadataProvider.getMetadataProvider());
         hepPlanner.registerMetadataProviders(relMetadataProviders);
         RelMetadataProvider chainedProvider = ChainedRelMetadataProvider.of(relMetadataProviders);
         relNode.getCluster().setMetadataProvider(new CachingRelMetadataProvider(chainedProvider, hepPlanner));
+
         hepPlanner.setRoot(relNode);
         return hepPlanner.findBestExp();
     }

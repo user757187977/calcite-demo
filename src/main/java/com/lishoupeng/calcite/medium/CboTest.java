@@ -1,7 +1,6 @@
 package com.lishoupeng.calcite.medium;
 
 import com.lishoupeng.calcite.easy.utils.CalciteUtils;
-import com.lishoupeng.calcite.medium.cost.DefaultRelMetadataProvider;
 import com.lishoupeng.calcite.medium.ruleinstances.CSVFilterConverter;
 import com.lishoupeng.calcite.medium.ruleinstances.CSVNewProjectConverter;
 import com.lishoupeng.calcite.medium.ruleinstances.CSVNewProjectRule;
@@ -30,7 +29,6 @@ public class CboTest {
 
         RelNode relNode = Utils.rboOptimization(
                 relRoot.rel,
-                DefaultRelMetadataProvider.getMetadataProvider(),
                 CSVTableScanConverter.INSTANCE,
                 CSVFilterConverter.INSTANCE,
                 CSVProjectConverter.INSTANCE,

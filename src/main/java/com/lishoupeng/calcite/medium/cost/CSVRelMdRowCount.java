@@ -19,8 +19,7 @@ public class CSVRelMdRowCount extends RelMdRowCount {
     }
 
     public static final RelMetadataProvider SOURCE = ReflectiveRelMetadataProvider.reflectiveSource(
-            BuiltInMethod.ROW_COUNT.method,
-            new CSVRelMdRowCount()
+            BuiltInMethod.ROW_COUNT.method, new CSVRelMdRowCount()
     );
 
     @Override
