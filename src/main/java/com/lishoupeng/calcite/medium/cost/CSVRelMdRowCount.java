@@ -34,6 +34,12 @@ public class CSVRelMdRowCount extends RelMdRowCount {
         return 2.0;
     }
 
+    /**
+     * 重写了默认实现.
+     * @param rel 过滤条件
+     * @param mq
+     * @return
+     */
     @Override
     public Double getRowCount(Filter rel, RelMetadataQuery mq) {
         System.out.println("getRowCount Filter");
