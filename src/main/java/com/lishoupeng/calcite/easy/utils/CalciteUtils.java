@@ -112,6 +112,11 @@ public class CalciteUtils {
         }
     }
 
+    /**
+     * 这个 Connect 体现了官网提到的 Any data, anywhere.
+     * @param filePath filePath
+     * @return Connection
+     */
     public static Connection getConnect(String filePath) {
         Connection connection = null;
         try {
