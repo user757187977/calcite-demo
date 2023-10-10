@@ -173,15 +173,14 @@ public class CalciteUtils {
         return SqlValidatorUtil.newValidator(
                 SqlStdOperatorTable.instance(),
                 calciteCatalogReader,
-                new SqlTypeFactoryImpl(RelDataTypeSystem.DEFAULT),
-                SqlConformanceEnum.DEFAULT
+                new SqlTypeFactoryImpl(RelDataTypeSystem.DEFAULT)
         );
     }
 
     public static HepPlanner createHepPlanner() {
         HepProgramBuilder hepProgramBuilder = new HepProgramBuilder();
-        hepProgramBuilder.addRuleInstance(FilterJoinRule.FILTER_ON_JOIN);
-        hepProgramBuilder.addRuleInstance(ReduceExpressionsRule.PROJECT_INSTANCE);
+//        hepProgramBuilder.addRuleInstance(FilterJoinRule.TRUE_PREDICATE);
+//        hepProgramBuilder.addRuleInstance(ReduceExpressionsRule.PROJECT_INSTANCE);
         hepProgramBuilder.addRuleInstance(PruneEmptyRules.PROJECT_INSTANCE);
         return new HepPlanner(hepProgramBuilder.build());
     }
@@ -192,8 +191,8 @@ public class CalciteUtils {
         planner.addRelTraitDef(ConventionTraitDef.INSTANCE);
         planner.addRelTraitDef(RelDistributionTraitDef.INSTANCE);
         // add rules
-        planner.addRule(FilterJoinRule.FILTER_ON_JOIN);
-        planner.addRule(ReduceExpressionsRule.PROJECT_INSTANCE);
+//        planner.addRule(FilterJoinRule.FILTER_ON_JOIN);
+//        planner.addRule(ReduceExpressionsRule.PROJECT_INSTANCE);
         planner.addRule(PruneEmptyRules.PROJECT_INSTANCE);
         // add ConverterRule
         planner.addRule(EnumerableRules.ENUMERABLE_MERGE_JOIN_RULE);
@@ -221,11 +220,12 @@ public class CalciteUtils {
         final RelOptCluster cluster = RelOptCluster.create(planner, rexBuilder);
 
         // init SqlToRelConverter config
-        final SqlToRelConverter.Config config = SqlToRelConverter.configBuilder()
-                .withConfig(frameworkConfig.getSqlToRelConverterConfig())
-                .withTrimUnusedFields(false)
-                .withConvertTableAccess(false)
-                .build();
+//        final SqlToRelConverter.Config config = SqlToRelConverter.configBuilder()
+//                .withConfig(frameworkConfig.getSqlToRelConverterConfig())
+//                .withTrimUnusedFields(false)
+//                .withConvertTableAccess(false)
+//                .build();
+        SqlToRelConverter.Config config = SqlToRelConverter.config();
         // 初始化 SqlToRelConverter
         final SqlToRelConverter sqlToRelConverter = new SqlToRelConverter(
                 new ViewExpanderImpl(),

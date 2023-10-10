@@ -45,9 +45,9 @@ public class Visitor extends SqlBasicVisitor<SqlNode> {
                 for (SqlNode sqlNode : sqlSelect.getSelectList().getList()) {
                     selectColumnNames.add(sqlNode.toString());
                 }
-                for (SqlNode sqlNode : ((SqlBasicCall) sqlSelect.getWhere()).operands) {
-                    whereColumnNames.add(sqlNode.toString());
-                }
+//                for (SqlNode sqlNode : sqlSelect.getWhere()) {
+//                    whereColumnNames.add(sqlNode.toString());
+//                }
                 SqlNode fromNode = sqlSelect.getFrom();
                 if (SqlKind.JOIN.equals(fromNode.getKind())) {
                     SqlJoin sqlJoin = (SqlJoin) fromNode;
