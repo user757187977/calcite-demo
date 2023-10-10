@@ -206,6 +206,7 @@ public class CalciteUtils {
 
     public static SqlNode parse(String sql) throws SqlParseException {
         SqlParser parser = SqlParser.create(sql, SqlParser.Config.DEFAULT);
+//        SqlParser parser = SqlParser.create(sql, SqlParser.configBuilder().setLex(Lex.MYSQL).build());
         return parser.parseStmt();
     }
 
